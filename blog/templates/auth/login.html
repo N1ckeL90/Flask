@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Login as
+{% endblock %}
+
+{% block body %}
+    <h4>Авторизация:</h4>
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% endif %}
+    <form method="post">
+        <label for="input-username" class=> Имя пользователя:</label>
+        <input
+                id="input-username"
+                type="text"
+                name="username"
+                placeholder="Введите имя пользователя"
+                required
+        >
+        <button class="btn btn-primary" type="submit">Войти</button>
+    </form>
+{% endblock %}

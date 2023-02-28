@@ -12,6 +12,10 @@
         </p>
     </div>
     <h5>
-        Автор: <a href="{{ url_for('user.get_user', pk=article.author.id) }}">{{ article.author.user_name }}</a>
+        {% if current_user.is_authenticated %}
+            Автор: <a href="{{ url_for('user.get_user', pk=article.author) }}">{{ article.user.username }}</a>
+        {% else %}
+            {{ article.user.username }}
+        {% endif %}
     </h5>
 {% endblock %}
