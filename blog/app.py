@@ -1,20 +1,26 @@
+import os
+
 from flask import Flask, render_template
+from flask_migrate import Migrate
 from blog.user.views import user
 from blog.article.views import article
 from blog.models.database import db
 from blog.views.auth import auth_app, login_manager
 
 
+cfg_name = os.environ.get('CONFIG_NAME') or 'ProductionConfig'
+
 app = Flask(__name__)
 app.register_blueprint(user)
 app.register_blueprint(article)
 app.register_blueprint(auth_app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SECRET_KEY"] = "_&xgpaf_@-(6c#_n6eqb9(it947^!7x1c5lylhru9yrixyn2h!"
+app.config.from_object(f'blog.configs.{cfg_name}')
 
 db.init_app(app)
 login_manager.init_app(app)
+
+
+migrate = Migrate(app, db)
 
 
 @app.route('/')
@@ -31,13 +37,11 @@ def init_db():
 @app.cli.command("create-users")
 def create_users():
     from blog.models import User
-    admin = User(username='admin', is_staff=True)
     user1 = User(username='Павел')
     user2 = User(username='Сергей')
     user3 = User(username='Ольга')
     user4 = User(username='Екатерина')
 
-    db.session.add(admin)
     db.session.add(user1)
     db.session.add(user2)
     db.session.add(user3)

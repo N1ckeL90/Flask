@@ -10,6 +10,8 @@ class User(db.Model, UserMixin):
     email = Column(String(255), unique=True)
     is_staff = Column(Boolean, nullable=False, default=False)
     article = db.relationship('Article', backref='user', uselist=False)
+    first_name = Column(String(80))
+    last_name = Column(String(80))
 
     def __repr__(self):
         return f'<User # {self.id} {self.username}>'
