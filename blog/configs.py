@@ -7,6 +7,7 @@ class BaseConfig(object):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///blog.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = "_&xgpaf_@-(6c#_n6eqb9(it947^!7x1c5lylhru9yrixyn2h!"
+    WTF_CSRF_ENABLED = True
 
 
 class DevConfig(BaseConfig):

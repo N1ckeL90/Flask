@@ -2,10 +2,12 @@ import os
 
 from flask import Flask, render_template
 from flask_migrate import Migrate
+
 from blog.user.views import user
 from blog.article.views import article
 from blog.models.database import db
 from blog.views.auth import auth_app, login_manager
+from blog.security import flask_bcrypt
 
 
 cfg_name = os.environ.get('CONFIG_NAME') or 'ProductionConfig'
@@ -18,9 +20,9 @@ app.config.from_object(f'blog.configs.{cfg_name}')
 
 db.init_app(app)
 login_manager.init_app(app)
+flask_bcrypt.init_app(app)
 
-
-migrate = Migrate(app, db)
+migrate = Migrate(app, db, compare_type=True)
 
 
 @app.route('/')
@@ -28,41 +30,24 @@ def index():
     return render_template('index.html')
 
 
-@app.cli.command("init-db")
-def init_db():
-    db.create_all()
-    print("done!")
-
-
-@app.cli.command("create-users")
-def create_users():
+@app.cli.command("create-admin")
+def create_admin():
     from blog.models import User
-    user1 = User(username='Павел')
-    user2 = User(username='Сергей')
-    user3 = User(username='Ольга')
-    user4 = User(username='Екатерина')
+    admin = User(username='admin', is_staff=True)
+    admin.password = os.environ.get("ADMIN_PASSWORD") or 'adminpass'
 
-    db.session.add(user1)
-    db.session.add(user2)
-    db.session.add(user3)
-    db.session.add(user4)
+    db.session.add(admin)
     db.session.commit()
 
-    print('Done!')
+    print('created admin:', admin)
 
 
 @app.cli.command('create-articles')
 def create_articles():
     from blog.models.article import Article
-    article1 = Article(title='Статья 1', text='Описание статьи 1', author=2)
-    article2 = Article(title='Статья 2', text='Описание статьи 2', author=3)
-    article3 = Article(title='Статья 3', text='Описание статьи 3', author=4)
-    article4 = Article(title='Статья 4', text='Описание статьи 4', author=2)
+    article1 = Article(title='Статья 1', text='Описание статьи 1', author=1)
 
     db.session.add(article1)
-    db.session.add(article2)
-    db.session.add(article3)
-    db.session.add(article4)
     db.session.commit()
 
     print('Done!')

@@ -32,9 +32,14 @@
                     </button>
                 {% else %}
                     <button type="button" class="btn btn-outline-light me-2">
-                        <a class="nav-link" href="{{ url_for('auth_app.logout') }}">
-                            <a href="{{ url_for('auth_app.login') }}"
-                               class="nav-link {% if request.endpoint == 'auth_app.login' -%}active{%- endif %}">Войти</a>
+                        <a href="{{ url_for('auth_app.login') }}"
+                           class="nav-link {% if request.endpoint == 'auth_app.login' -%}active{%- endif %}">Войти</a>
+                    </button>
+                    <button type="button" class="btn btn-outline-light me-2">
+                        <a href="{{ url_for('auth_app.register') }}"
+                           class="nav-link {% if request.endpoint == 'auth_app.register' -%}active{%- endif %}">
+                            Регистрация
+                        </a>
                     </button>
                 {% endif %}
             </div>
