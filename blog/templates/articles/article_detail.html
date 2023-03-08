@@ -1,21 +1,15 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Article detail
+    Article #{{ article.id }}: {{ article.title }}
 {% endblock %}
 
 {% block body %}
-    <h1>{{ article.title }}</h1>
-    <div class="border">
-        <p>
-            {{ article.text }}
-        </p>
+    <h4>{{ article.title }}</h4>
+    <div>
+        <div class="border">{{ article.text }}</div>
+        <div>Опубликовано {{ article.created_at }}
+            <br>Автор: {{ article.author.user.username }}
+        </div>
     </div>
-    <h5>
-        {% if current_user.is_authenticated %}
-            Автор: <a href="{{ url_for('user.get_user', pk=article.author) }}">{{ article.user.username }}</a>
-        {% else %}
-            {{ article.user.username }}
-        {% endif %}
-    </h5>
 {% endblock %}
