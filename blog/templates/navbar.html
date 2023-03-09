@@ -17,11 +17,18 @@
                 </li>
                 {% if current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link text-white" aria-current="page" href="{{ url_for('user.user_list') }}">Пользователи</a>
+                        <a class="nav-link text-white" aria-current="page" href="{{ url_for('user.user_list') }}">
+                            Пользователи
+                        </a>
                     </li>
                 {% endif %}
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="{{ url_for('article.article_list') }}">Статьи</a>
+                    <a class="nav-link text-white" aria-current="page" href="{{ url_for('author.list') }}">
+                        Авторы
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('article.list') }}">Статьи</a>
                 </li>
             </ul>
             <div class="text-end">

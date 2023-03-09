@@ -3,8 +3,9 @@ import os
 from flask import Flask, render_template
 from flask_migrate import Migrate
 
-from blog.user.views import user
-from blog.article.views import article
+from blog.views.user import user
+from blog.views.article import article
+from blog.views.author import author
 from blog.models.database import db
 from blog.views.auth import auth_app, login_manager
 from blog.security import flask_bcrypt
@@ -15,6 +16,7 @@ cfg_name = os.environ.get('CONFIG_NAME') or 'ProductionConfig'
 app = Flask(__name__)
 app.register_blueprint(user)
 app.register_blueprint(article)
+app.register_blueprint(author)
 app.register_blueprint(auth_app)
 app.config.from_object(f'blog.configs.{cfg_name}')
 
