@@ -1,10 +1,11 @@
 from flask import Blueprint, render_template, redirect, url_for, current_app, request
 from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import joinedload
 from werkzeug.exceptions import NotFound
 
 from blog.forms.article import CreateArticleForm
-from blog.models import Article, Author
+from blog.models import Article, Author, Tag
 from blog.models.database import db
 
 article = Blueprint('article', __name__, url_prefix='/articles', static_folder='../static', )
@@ -20,7 +21,7 @@ def article_list():
 
 @article.route('/<int:pk>', endpoint='details')
 def get_article(pk: int):
-    article = Article.query.filter_by(id=pk).one_or_none()
+    article = Article.query.filter_by(id=pk).options(joinedload(Article.tags)).one_or_none()
     if article is None:
         raise NotFound(f'Статья с id = {pk} не найдена')
     return render_template(
@@ -34,8 +35,13 @@ def get_article(pk: int):
 def create_article():
     error = None
     form = CreateArticleForm(request.form)
+    form.tags.choices = [(tag.id, tag.name) for tag in Tag.query.order_by('name')]
     if request.method == "POST" and form.validate_on_submit():
         article = Article(title=form.title.data.strip(), text=form.body.data)
+        if form.tags.data:
+            selected_tags = Tag.query.filter(Tag.id.in_(form.tags.data))
+            for tag in selected_tags:
+                article.tags.append(tag)
         db.session.add(article)
         if current_user.author:
             # use existing author if present
