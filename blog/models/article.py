@@ -4,6 +4,7 @@ from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, func
 from sqlalchemy.orm import relationship
 
 from blog.models.database import db
+from blog.models.article_tag import article_tag_association_table
 
 
 class Article(db.Model):
@@ -15,6 +16,11 @@ class Article(db.Model):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     author = relationship('Author', back_populates='articles')
+    tags = relationship(
+        'Tag',
+        secondary=article_tag_association_table,
+        back_populates='articles',
+    )
 
     def __repr__(self):
         return f'<Article # {self.id} {self.title}>'
