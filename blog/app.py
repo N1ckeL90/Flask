@@ -10,11 +10,13 @@ from blog.models.database import db
 from blog.views.auth import auth_app, login_manager
 from blog.security import flask_bcrypt
 from blog import commands
+from blog.admin import admin
 
 
 cfg_name = os.environ.get('CONFIG_NAME') or 'ProductionConfig'
 
 app = Flask(__name__)
+admin.init_app(app)
 app.register_blueprint(user)
 app.register_blueprint(article)
 app.register_blueprint(author)
