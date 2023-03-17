@@ -30,7 +30,6 @@ flask_bcrypt.init_app(app)
 migrate = Migrate(app, db, compare_type=True)
 
 app.cli.add_command(commands.create_admin)
-app.cli.add_command(commands.create_articles)
 app.cli.add_command(commands.create_tags)
 
 

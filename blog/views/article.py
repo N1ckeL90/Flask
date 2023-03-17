@@ -37,7 +37,7 @@ def create_article():
     form = CreateArticleForm(request.form)
     form.tags.choices = [(tag.id, tag.name) for tag in Tag.query.order_by('name')]
     if request.method == "POST" and form.validate_on_submit():
-        article = Article(title=form.title.data.strip(), text=form.body.data)
+        article = Article(title=form.title.data.strip(), text=form.body.data, author_id=current_user.id)
         if form.tags.data:
             selected_tags = Tag.query.filter(Tag.id.in_(form.tags.data))
             for tag in selected_tags:
