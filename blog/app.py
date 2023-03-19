@@ -11,6 +11,7 @@ from blog.views.auth import auth_app, login_manager
 from blog.security import flask_bcrypt
 from blog import commands
 from blog.admin import admin
+from blog.api import init_api
 
 
 cfg_name = os.environ.get('CONFIG_NAME') or 'ProductionConfig'
@@ -26,6 +27,7 @@ app.config.from_object(f'blog.configs.{cfg_name}')
 db.init_app(app)
 login_manager.init_app(app)
 flask_bcrypt.init_app(app)
+api = init_api(app)
 
 migrate = Migrate(app, db, compare_type=True)
 

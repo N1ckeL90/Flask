@@ -9,6 +9,9 @@ class BaseConfig(object):
     SECRET_KEY = "_&xgpaf_@-(6c#_n6eqb9(it947^!7x1c5lylhru9yrixyn2h!"
     WTF_CSRF_ENABLED = True
     FLASK_ADMIN_SWATCH = 'darkly'
+    OPENAPI_URL_PREFIX = '/api/swagger'
+    OPENAPI_SWAGGER_UI_PATH = '/'
+    OPENAPI_SWAGGER_UI_VERSION = '3.22.0'
 
 
 class DevConfig(BaseConfig):
