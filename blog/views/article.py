@@ -38,21 +38,20 @@ def create_article():
     form.tags.choices = [(tag.id, tag.name) for tag in Tag.query.order_by('name')]
     if request.method == "POST" and form.validate_on_submit():
         article = Article(title=form.title.data.strip(), text=form.body.data, author_id=current_user.id)
-        if form.tags.data:
-            selected_tags = Tag.query.filter(Tag.id.in_(form.tags.data))
-            for tag in selected_tags:
-                article.tags.append(tag)
-        db.session.add(article)
+        
         if current_user.author:
-            # use existing author if present
-            article.author = current_user.author
+            article.author_id = current_user.author.id
         else:
-            # otherwise create author record
             author = Author(user_id=current_user.id)
             db.session.add(author)
             db.session.flush()
             article.author_id = author.id
         try:
+            if form.tags.data:
+                selected_tags = Tag.query.filter(Tag.id.in_(form.tags.data))
+                for tag in selected_tags:
+                    article.tags.append(tag)
+            db.session.add(article)
             db.session.commit()
         except IntegrityError:
             current_app.logger.exception("Could not create a new article!")
